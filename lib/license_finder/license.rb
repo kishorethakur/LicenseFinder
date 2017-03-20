@@ -23,6 +23,10 @@ module LicenseFinder
       def find_by_text(text)
         all.detect { |l| l.matches_text? text }
       end
+
+      def find_by_spdx(spdx_string)
+        all.detect { |l| l.spdx == spdx_string }
+      end
     end
 
     def initialize(settings)
@@ -30,10 +34,11 @@ module LicenseFinder
       @pretty_name = settings.fetch(:pretty_name, short_name)
       @other_names = settings.fetch(:other_names, [])
       @url         = settings.fetch(:url)
+      @spdx        = settings.fetch(:spdx, [])
       @matcher     = settings.fetch(:matcher) { Matcher.from_template(Template.named(short_name)) }
     end
 
-    attr_reader :url
+    attr_reader :url, :spdx
 
     def name
       pretty_name
